@@ -2,10 +2,11 @@
 import { assert as ok, assertThrows } from "@std/assert";
 import { resolvesNext, stub } from "@std/testing/mock";
 import { MacOsSay } from "./mod.ts";
+import { Command } from "@gnome/exec";
 
 Deno.test("basic test", async () => {
+  const stubCommand = stub(Command.prototype, "output", resolvesNext([{ code: 0 } as any, { code: 0 } as any]));
   const say = new MacOsSay().say("Hello, world!");
-  const stubExec = stub(say, "exec", resolvesNext([{ code: 0 } as any]));
 
   ok(say.command === "say Hello, world!");
   ok(say.exec !== undefined);
@@ -13,10 +14,7 @@ Deno.test("basic test", async () => {
   const output = await say.exec();
   ok(output.code === 0);
 
-  stubExec.restore();
-
   const syaFile = new MacOsSay().sayFile("input.txt");
-  const stubExecFile = stub(syaFile, "exec", resolvesNext([{ code: 0 } as any]));
 
   ok(syaFile.command === "say -f input.txt");
   ok(syaFile.exec !== undefined);
@@ -24,7 +22,7 @@ Deno.test("basic test", async () => {
   const outputFile = await syaFile.exec();
   ok(outputFile.code === 0);
 
-  stubExecFile.restore();
+  stubCommand.restore();
 });
 
 Deno.test("with options test", () => {
@@ -146,17 +144,27 @@ Deno.test("say file test", () => {
 });
 
 Deno.test("get voices test", async () => {
-  const stubExec = stub(
-    MacOsSay,
-    "getVoices",
-    resolvesNext([[{ name: "Tessa", locale: "en_ZA", example: "Hello! My name is Tessa." }] as any]),
+  const stubCommand = stub(
+    Command.prototype,
+    "output",
+    resolvesNext([{
+      success: true,
+      lines: () => [
+        `Sandy (French (Canada)) fr_CA    # Bonjour! Je m’appelle Sandy.`,
+        `Sandy (French (France)) fr_FR    # Bonjour, je m’appelle Sandy.`,
+      ],
+    }] as any),
   );
   const voices = await MacOsSay.getVoices();
 
-  ok(voices.length === 1);
-  ok(voices[0].name === "Tessa");
-  ok(voices[0].locale === "en_ZA");
-  ok(voices[0].example === "Hello! My name is Tessa.");
+  ok(voices.length === 2);
+  ok(voices[0].name === "Sandy (French (Canada))");
+  ok(voices[0].locale === "fr_CA");
+  ok(voices[0].example === "Bonjour! Je m’appelle Sandy.");
 
-  stubExec.restore();
+  ok(voices[1].name === "Sandy (French (France))");
+  ok(voices[1].locale === "fr_FR");
+  ok(voices[1].example === "Bonjour, je m’appelle Sandy.");
+
+  stubCommand.restore();
 });

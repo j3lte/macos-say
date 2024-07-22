@@ -1,4 +1,4 @@
-import { Command, type CommandOptions, type Output } from "@gnome/exec";
+import { Command, type CommandOptions, type Output, output } from "@gnome/exec";
 import type { MacOsSayOutput, NonNullableOptions, Options, Voice } from "./types.ts";
 
 /**
@@ -100,17 +100,21 @@ export class MacOsSay {
       throw new Error(output.errorText());
     }
 
-    const outputText = output.text();
+    const lines = output.lines();
     const voices: Voice[] = [];
-    const regex = /^([A-Za-zÀ-ÖØ-öø-ÿ\s]+)\s{2,}([a-z]{2}_[A-Z]{2})\s{2,}#\s(.+)$/gm;
-
     let match: RegExpMatchArray | null;
 
-    while ((match = regex.exec(outputText)) !== null) {
-      const name = match[1].trim();
-      const locale = match[2].trim();
-      const example = match[3].trim();
-      voices.push({ name, locale, example });
+    for (const line of lines) {
+      if ((match = line.match(/[a-z]{2}_[A-Z]{2}/)) !== null) {
+        const locale = match[0];
+        const [name, example] = line.split(/[a-z]{2}_[A-Z]{2}/);
+        const voice: Voice = {
+          name: name.trim(),
+          locale,
+          example: example.trim().replace(/^# /, ""),
+        };
+        voices.push(voice);
+      }
     }
 
     return voices;

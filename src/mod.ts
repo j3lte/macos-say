@@ -1,6 +1,19 @@
 import { Command, type CommandOptions, type Output } from "@gnome/exec";
 import type { MacOsSayOutput, NonNullableOptions, Options, Voice } from "./types.ts";
 
+/**
+ * Class to use the `say` command in MacOS.
+ *
+ * This is a wrapper around the `say` command, which is a text-to-speech command in MacOS.
+ *
+ * ## Basic Usage
+ * ```typescript
+ * import { MacOsSay } from '@j3lte/macos-say';
+ * // Create a new instance of MacOsSay
+ * const sayer = new MacOsSay();
+ * const output = await say.say('Hello, World!').exec();
+ * ```
+ */
 export class MacOsSay {
   private options: Options = {
     voice: null,

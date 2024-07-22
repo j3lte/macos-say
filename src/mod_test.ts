@@ -18,9 +18,33 @@ Deno.test("with options test", () => {
 });
 
 Deno.test("with options chaining test", () => {
-  const say = new MacOsSay().setRate(100).setQuality(127).setVoice("Alex (German)").say("Hello, world!");
+  const say = new MacOsSay()
+    .setRate(100)
+    .setQuality(127)
+    .setVoice("Alex (German)")
+    .setAudioDeviceID("output")
+    .setFileFormat("mp3")
+    .setOutputFile("output.mp3")
+    .setNetwork("localhost:3000")
+    .setFileFormat("mp3")
+    .say("Hello, world!");
 
-  ok(say.command === 'say -v "Alex (German)" -r 100 --quality=127 Hello, world!');
+  ok(
+    say.command ===
+      'say -v "Alex (German)" -r 100 --quality=127 -o output.mp3 -n localhost:3000 -a output --file-format=mp3 Hello, world!',
+  );
+});
+
+Deno.test("MacOsSay.opts test", () => {
+  const say = new MacOsSay({
+    rate: 100,
+    quality: 127,
+    voice: "Alex (German)",
+  });
+
+  ok(say.opts.rate === 100);
+  ok(say.opts.quality === 127);
+  ok(say.opts.voice === "Alex (German)");
 });
 
 Deno.test("rate test", () => {
@@ -33,10 +57,41 @@ Deno.test("rate test", () => {
 Deno.test("quality test", () => {
   ok(
     new MacOsSay({ quality: -100 }).say("Hello, world!").command === "say --quality=1 Hello, world!",
-    "Quality should be 1 when less than 0.",
   );
   ok(
     new MacOsSay({ quality: 127 }).say("Hello, world!").command === "say --quality=127 Hello, world!",
-    "Quality should be 127 when greater than 127.",
+  );
+  ok(
+    new MacOsSay({ quality: 255 }).say("Hello, world!").command === "say --quality=127 Hello, world!",
+  );
+});
+
+Deno.test("output file test", () => {
+  ok(
+    new MacOsSay({ outputFile: "output.mp3" }).say("Hello, world!").command === "say -o output.mp3 Hello, world!",
+  );
+});
+
+Deno.test("network test", () => {
+  ok(
+    new MacOsSay({ network: "localhost:3000" }).say("Hello, world!").command === "say -n localhost:3000 Hello, world!",
+  );
+});
+
+Deno.test("audio device test", () => {
+  ok(
+    new MacOsSay({ audioDeviceID: "output" }).say("Hello, world!").command === "say -a output Hello, world!",
+  );
+});
+
+Deno.test("file format test", () => {
+  ok(
+    new MacOsSay({ fileFormat: "mp3" }).say("Hello, world!").command === "say --file-format=mp3 Hello, world!",
+  );
+});
+
+Deno.test("say file test", () => {
+  ok(
+    new MacOsSay({ audioDeviceID: "output" }).sayFile("input.txt").command === "say -a output -f input.txt",
   );
 });

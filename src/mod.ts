@@ -39,7 +39,7 @@ export class MacOsSay {
     }
   }
 
-  private getArgs(suffixArgs?: string[]): { args: string[]; command: string } {
+  private getArgs(suffixArgs: string[]): { args: string[]; command: string } {
     const args: string[] = [];
     if (this.options.voice) {
       args.push("-v", `"${this.options.voice}"`);
@@ -62,7 +62,7 @@ export class MacOsSay {
     if (this.options.fileFormat) {
       args.push(`--file-format=${this.options.fileFormat}`);
     }
-    const outputArgs = args.concat(suffixArgs || []);
+    const outputArgs = args.concat(suffixArgs);
     return { args: outputArgs, command: `say ${outputArgs.join(" ")}` };
   }
 

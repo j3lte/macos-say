@@ -43,6 +43,16 @@ Deno.test("with options test", async () => {
   stubCommand.restore();
 });
 
+Deno.test("static method test", async () => {
+  const stubCommand = stub(Command.prototype, "output", resolvesNext([{ code: 0 } as any]));
+  const output = await MacOsSay.say("Hello, world!");
+
+  ok(output !== undefined);
+  ok(output.code === 0);
+
+  stubCommand.restore();
+});
+
 Deno.test("with options chaining test", () => {
   const say = new MacOsSay()
     .setRate(100)

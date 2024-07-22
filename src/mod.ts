@@ -1,4 +1,4 @@
-import { Command, type CommandOptions, type Output, output } from "@gnome/exec";
+import { Command, type CommandOptions, type Output } from "@gnome/exec";
 import type { MacOsSayOutput, NonNullableOptions, Options, Voice } from "./types.ts";
 
 /**

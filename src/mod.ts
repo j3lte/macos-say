@@ -62,7 +62,7 @@ export class MacOsSay {
     if (this.options.fileFormat) {
       args.push(`--file-format=${this.options.fileFormat}`);
     }
-    const outputArgs = suffixArgs ? [...args, ...suffixArgs] : args;
+    const outputArgs = args.concat(suffixArgs || []);
     return { args: outputArgs, command: `say ${outputArgs.join(" ")}` };
   }
 

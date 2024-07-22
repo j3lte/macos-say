@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-explicit-any
-import { assert as ok, assertThrows } from "@std/assert";
+import { assert as ok, assertRejects, assertThrows } from "@std/assert";
 import { resolvesNext, stub } from "@std/testing/mock";
 import { MacOsSay } from "./mod.ts";
 import { Command } from "@gnome/exec";
@@ -25,7 +25,8 @@ Deno.test("basic test", async () => {
   stubCommand.restore();
 });
 
-Deno.test("with options test", () => {
+Deno.test("with options test", async () => {
+  const stubCommand = stub(Command.prototype, "output", resolvesNext([{ code: 0 } as any]));
   const say = new MacOsSay({
     rate: 100,
     quality: 127,
@@ -33,6 +34,13 @@ Deno.test("with options test", () => {
   }).say("Hello, world!");
 
   ok(say.command === 'say -v "Alex (German)" -r 100 --quality=127 Hello, world!');
+
+  const output = await say.exec();
+
+  ok(output !== undefined);
+  ok(output.code === 0);
+
+  stubCommand.restore();
 });
 
 Deno.test("with options chaining test", () => {
@@ -153,6 +161,9 @@ Deno.test("get voices test", async () => {
         `Sandy (French (Canada)) fr_CA    # Bonjour! Je m’appelle Sandy.`,
         `Sandy (French (France)) fr_FR    # Bonjour, je m’appelle Sandy.`,
       ],
+    }, {
+      success: false,
+      errorText: () => "Error",
     }] as any),
   );
   const voices = await MacOsSay.getVoices();
@@ -165,6 +176,8 @@ Deno.test("get voices test", async () => {
   ok(voices[1].name === "Sandy (French (France))");
   ok(voices[1].locale === "fr_FR");
   ok(voices[1].example === "Bonjour, je m’appelle Sandy.");
+
+  await assertRejects(() => MacOsSay.getVoices(), Error, "Error");
 
   stubCommand.restore();
 });

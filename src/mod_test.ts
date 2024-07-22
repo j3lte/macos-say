@@ -40,11 +40,40 @@ Deno.test("MacOsSay.opts test", () => {
     rate: 100,
     quality: 127,
     voice: "Alex (German)",
+    audioDeviceID: "output",
+    fileFormat: "mp3",
+    network: "localhost:3000",
+    outputFile: "output.mp3",
   });
 
   ok(say.opts.rate === 100);
   ok(say.opts.quality === 127);
   ok(say.opts.voice === "Alex (German)");
+  ok(say.opts.audioDeviceID === "output");
+  ok(say.opts.fileFormat === "mp3");
+  ok(say.opts.network === "localhost:3000");
+  ok(say.opts.outputFile === "output.mp3");
+
+  say.setRate();
+  ok(say.opts.rate === null);
+
+  say.setQuality();
+  ok(say.opts.quality === null);
+
+  say.setVoice();
+  ok(say.opts.voice === null);
+
+  say.setAudioDeviceID();
+  ok(say.opts.audioDeviceID === null);
+
+  say.setFileFormat();
+  ok(say.opts.fileFormat === null);
+
+  say.setNetwork();
+  ok(say.opts.network === null);
+
+  say.setOutputFile();
+  ok(say.opts.outputFile === null);
 });
 
 Deno.test("rate test", () => {

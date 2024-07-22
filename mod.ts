@@ -3,7 +3,7 @@
  *
  * ## Overview
  *
- * This is a simple module to use the `say` command in MacOS. It is a wrapper around the `say` command, which is a text-to-speech command in MacOS.
+ * This is a simple module to use the `say` command in MacOS, which is a [text-to-speech command in MacOS](https://ss64.com/mac/say.html).
  *
  * ## Basic Usage
  * ```typescript

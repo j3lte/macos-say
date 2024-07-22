@@ -13,11 +13,14 @@
       "jsr:@gnome/runtime-constants@^0.1.0": "jsr:@gnome/runtime-constants@0.1.0",
       "jsr:@gnome/strings@^0.1.0": "jsr:@gnome/strings@0.1.0",
       "jsr:@gnome/strings@^0.2.0": "jsr:@gnome/strings@0.2.0",
+      "jsr:@std/assert@1.0.0-rc.2": "jsr:@std/assert@1.0.0-rc.2",
       "jsr:@std/assert@^0.226.0": "jsr:@std/assert@0.226.0",
       "jsr:@std/assert@^1.0.0": "jsr:@std/assert@1.0.0",
       "jsr:@std/encoding@^0.224.3": "jsr:@std/encoding@0.224.3",
+      "jsr:@std/internal@^1.0.0": "jsr:@std/internal@1.0.1",
       "jsr:@std/internal@^1.0.1": "jsr:@std/internal@1.0.1",
       "jsr:@std/path@^0.225.2": "jsr:@std/path@0.225.2",
+      "jsr:@std/testing@^0.225.3": "jsr:@std/testing@0.225.3",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:fs-ext@2.0.0": "npm:fs-ext@2.0.0"
     },
@@ -98,6 +101,12 @@
           "jsr:@std/internal@^1.0.1"
         ]
       },
+      "@std/assert@1.0.0-rc.2": {
+        "integrity": "0484eab1d76b55fca1c3beaff485a274e67dd3b9f065edcbe70030dfc0b964d3",
+        "dependencies": [
+          "jsr:@std/internal@^1.0.0"
+        ]
+      },
       "@std/encoding@0.224.3": {
         "integrity": "5e861b6d81be5359fad4155e591acf17c0207b595112d1840998bb9f476dbdaf"
       },
@@ -108,6 +117,12 @@
         "integrity": "0f2db41d36b50ef048dcb0399aac720a5348638dd3cb5bf80685bf2a745aa506",
         "dependencies": [
           "jsr:@std/assert@^0.226.0"
+        ]
+      },
+      "@std/testing@0.225.3": {
+        "integrity": "348c24d0479d44ab3dbb4f26170f242e19f24051b45935d4a9e7ca0ab7e37780",
+        "dependencies": [
+          "jsr:@std/assert@1.0.0-rc.2"
         ]
       }
     },
@@ -132,7 +147,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@gnome/exec@^0.5.0",
-      "jsr:@std/assert@^1.0.0"
+      "jsr:@std/assert@^1.0.0",
+      "jsr:@std/testing@^0.225.3"
     ]
   }
 }

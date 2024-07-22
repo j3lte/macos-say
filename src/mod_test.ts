@@ -1,10 +1,30 @@
+// deno-lint-ignore-file no-explicit-any
 import { assert as ok, assertThrows } from "@std/assert";
+import { resolvesNext, stub } from "@std/testing/mock";
 import { MacOsSay } from "./mod.ts";
 
-Deno.test("basic test", () => {
+Deno.test("basic test", async () => {
   const say = new MacOsSay().say("Hello, world!");
+  const stubExec = stub(say, "exec", resolvesNext([{ code: 0 } as any]));
 
   ok(say.command === "say Hello, world!");
+  ok(say.exec !== undefined);
+
+  const output = await say.exec();
+  ok(output.code === 0);
+
+  stubExec.restore();
+
+  const syaFile = new MacOsSay().sayFile("input.txt");
+  const stubExecFile = stub(syaFile, "exec", resolvesNext([{ code: 0 } as any]));
+
+  ok(syaFile.command === "say -f input.txt");
+  ok(syaFile.exec !== undefined);
+
+  const outputFile = await syaFile.exec();
+  ok(outputFile.code === 0);
+
+  stubExecFile.restore();
 });
 
 Deno.test("with options test", () => {
@@ -123,4 +143,20 @@ Deno.test("say file test", () => {
   ok(
     new MacOsSay({ audioDeviceID: "output" }).sayFile("input.txt").command === "say -a output -f input.txt",
   );
+});
+
+Deno.test("get voices test", async () => {
+  const stubExec = stub(
+    MacOsSay,
+    "getVoices",
+    resolvesNext([[{ name: "Tessa", locale: "en_ZA", example: "Hello! My name is Tessa." }] as any]),
+  );
+  const voices = await MacOsSay.getVoices();
+
+  ok(voices.length === 1);
+  ok(voices[0].name === "Tessa");
+  ok(voices[0].locale === "en_ZA");
+  ok(voices[0].example === "Hello! My name is Tessa.");
+
+  stubExec.restore();
 });

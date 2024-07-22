@@ -1,5 +1,6 @@
 # @j3lte/macos-say
 
+[![JSR](https://jsr.io/badges/@j3lte/macos-say)](https://jsr.io/@j3lte/macos-say)
 [![GitHub Release](https://img.shields.io/github/v/release/j3lte/macos-say)](https://github.com/j3lte/macos-say/releases/latest)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/j3lte/macos-say/ci.yml)](https://github.com/j3lte/macos-say/actions)
 [![codecov](https://codecov.io/gh/j3lte/macos-say/graph/badge.svg?token=153r6NsbQw)](https://codecov.io/gh/j3lte/macos-say)

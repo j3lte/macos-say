@@ -33,13 +33,13 @@ jobs:
         with:
           path: .artifacts/code-coverage.lcov
 
-      # - name: Publish To Codecov
-      #   uses: codecov/codecov-action@v4 # upload the report on Codecov
-      #   if: github.ref == 'refs/heads/main'
-      #   env:
-      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      #   with:
-      #     files: .artifacts/code-coverage.lcov
+      - name: Publish To Codecov
+        uses: codecov/codecov-action@v4 # upload the report on Codecov
+        if: github.ref == 'refs/heads/main'
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          files: .artifacts/code-coverage.lcov
 
       - name: Publish Dry Run
         run: deno publish --dry-run --allow-dirty

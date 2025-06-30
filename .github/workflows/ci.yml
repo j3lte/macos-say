@@ -62,16 +62,3 @@ jobs:
 
       - name: Publish
         run: deno publish
-
-      - name: Archive Release
-        uses: thedoctor0/zip-release@0.7.6
-        with:
-          type: "zip"
-          filename: "src.zip"
-          exclusions: "*.git*"
-
-      - name: Upload Release
-        uses: ncipollo/release-action@v1.18.0
-        with:
-          artifacts: "src.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}

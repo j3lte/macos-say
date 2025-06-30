@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { assert as ok, assertRejects, assertThrows } from "@std/assert";
 import { resolvesNext, stub } from "@std/testing/mock";
-import { MacOsSay } from "./mod.ts";
+import { MacOsSay, MacOsSayError } from "./mod.ts";
 import { Command } from "@gnome/exec";
 
 Deno.test("basic test", async () => {
@@ -168,8 +168,8 @@ Deno.test("get voices test", async () => {
     resolvesNext([{
       success: true,
       lines: () => [
-        `Sandy (French (Canada)) fr_CA    # Bonjour! Je m’appelle Sandy.`,
-        `Sandy (French (France)) fr_FR    # Bonjour, je m’appelle Sandy.`,
+        `Sandy (French (Canada)) fr_CA    # Bonjour! Je m'appelle Sandy.`,
+        `Sandy (French (France)) fr_FR    # Bonjour, je m'appelle Sandy.`,
       ],
     }, {
       success: false,
@@ -181,13 +181,14 @@ Deno.test("get voices test", async () => {
   ok(voices.length === 2);
   ok(voices[0].name === "Sandy (French (Canada))");
   ok(voices[0].locale === "fr_CA");
-  ok(voices[0].example === "Bonjour! Je m’appelle Sandy.");
+  ok(voices[0].example === "Bonjour! Je m'appelle Sandy.");
 
   ok(voices[1].name === "Sandy (French (France))");
   ok(voices[1].locale === "fr_FR");
-  ok(voices[1].example === "Bonjour, je m’appelle Sandy.");
+  ok(voices[1].example === "Bonjour, je m'appelle Sandy.");
 
-  await assertRejects(() => MacOsSay.getVoices(), Error, "Error");
+  MacOsSay.clearVoicesCache();
+  await assertRejects(() => MacOsSay.getVoices(), MacOsSayError, "Failed to get voices: Error");
 
   stubCommand.restore();
 });

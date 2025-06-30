@@ -123,3 +123,87 @@ export type Options = {
 export type NonNullableOptions<T> = {
   [K in keyof T]: NonNullable<T[K]>;
 };
+
+/**
+ * Custom error types for better error handling
+ */
+export class MacOsSayError extends Error {
+  constructor(message: string, public readonly code?: string) {
+    super(message);
+    this.name = "MacOsSayError";
+  }
+}
+
+export class VoiceNotFoundError extends MacOsSayError {
+  constructor(voice: string) {
+    super(`Voice "${voice}" not found on this system`, "VOICE_NOT_FOUND");
+    this.name = "VoiceNotFoundError";
+  }
+}
+
+export class InvalidOptionError extends MacOsSayError {
+  constructor(option: string, value: unknown, reason: string) {
+    super(`Invalid ${option}: ${value}. ${reason}`, "INVALID_OPTION");
+    this.name = "InvalidOptionError";
+  }
+}
+
+/**
+ * Validation result type
+ */
+export type ValidationResult = {
+  isValid: boolean;
+  errors: string[];
+};
+
+/**
+ * Event types for speech operations
+ */
+export type SpeechEvent =
+  | "start"
+  | "progress"
+  | "complete"
+  | "error"
+  | "cancel";
+
+export type SpeechEventData = {
+  event: SpeechEvent;
+  text?: string;
+  progress?: number;
+  error?: Error;
+  timestamp: number;
+};
+
+export type SpeechEventListener = (data: SpeechEventData) => void;
+
+/**
+ * Speech status information
+ */
+export type SpeechStatus = {
+  isSpeaking: boolean;
+  currentText?: string;
+  startTime?: number;
+  duration?: number;
+};
+
+/**
+ * Configuration for the MacOsSay library
+ */
+export type MacOsSayConfig = {
+  defaultVoice?: string;
+  defaultRate?: number;
+  defaultQuality?: number;
+  defaultAudioDevice?: string;
+  cacheVoices?: boolean;
+  cacheDuration?: number;
+  autoValidate?: boolean;
+};
+
+/**
+ * Configuration file structure
+ */
+export type ConfigFile = {
+  version: string;
+  config: MacOsSayConfig;
+  lastUpdated: string;
+};

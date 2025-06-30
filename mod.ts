@@ -3,7 +3,7 @@
  *
  * ## Overview
  *
- * This is a simple module to use the `say` command in MacOS, which is a [text-to-speech command in MacOS](https://ss64.com/mac/say.html).
+ * This is a comprehensive module to use the `say` command in MacOS, which is a [text-to-speech command in MacOS](https://ss64.com/mac/say.html). The library provides a type-safe, feature-rich wrapper with enhanced functionality including voice management, validation, caching, and configuration management.
  *
  * ## Basic Usage
  * ```typescript
@@ -13,7 +13,7 @@
  * const output = await sayer.say('Hello, World!').exec();
  *
  * // You can also use a static method
- * MacOsSay.say('Hello, World!');
+ * await MacOsSay.say('Hello, World!');
  *
  * // Use options
  * const sayer = new MacOsSay({ voice: 'Alex', rate: 200 });

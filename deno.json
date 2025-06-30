@@ -29,7 +29,8 @@
       ".vscode",
       ".github",
       "testing.ts",
-      "src/mod_test.ts"
+      "src/mod_test.ts",
+      "examples"
     ]
   }
 }
